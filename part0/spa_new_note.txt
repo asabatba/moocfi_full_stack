@@ -1,0 +1,12 @@
+
+note over browser:
+before the POST request, the client-side
+JS injects the new note into
+the existing list elements of the page
+end note
+
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+server-->browser: 200, JSON response with "note created" message
+
+
+
