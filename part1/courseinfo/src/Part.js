@@ -4,6 +4,6 @@ import React from 'react'
 
 export const Part = (props) => (
     <p>
-        {props.part} {props.exes}
+        {props.part.name} {props.part.exercises}
     </p>
 )
