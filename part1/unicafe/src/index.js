@@ -14,7 +14,7 @@ const Button = (props) => {
   </button>)
 }
 
-const Statistic = (props) => (<div>{props.name} : {props.value}</div>)
+const Statistic = (props) => (<tr><td>{props.name}</td><td>{props.value}</td></tr>)
 
 const Statistics = (props) => {
 
@@ -29,17 +29,21 @@ const Statistics = (props) => {
       <span>No feedback given yet</span>
     </div>)
 
-  const avg = (props.good - props.bad) / all.length;
-  const positive = props.good / (sum > 0 ? sum : 1) * 100 + ' %';
+  const avg = ((props.good - props.bad) / sum).toFixed(2);
+  const positive = (props.good / (sum > 0 ? sum : 1) * 100).toFixed(2) + ' %';
 
   return (<div>
     <Title text="statistics"></Title>
-    <Statistic name="good" value={props.good}></Statistic>
-    <Statistic name="neutral" value={props.neutral}></Statistic>
-    <Statistic name="bad" value={props.bad}></Statistic>
-    <Statistic name="all" value={sum}></Statistic>
-    <Statistic name="average" value={avg}></Statistic>
-    <Statistic name="positive" value={positive}></Statistic>
+    <table>
+      <tbody>
+        <Statistic name="good" value={props.good}></Statistic>
+        <Statistic name="neutral" value={props.neutral}></Statistic>
+        <Statistic name="bad" value={props.bad}></Statistic>
+        <Statistic name="all" value={sum}></Statistic>
+        <Statistic name="average" value={avg}></Statistic>
+        <Statistic name="positive" value={positive}></Statistic>
+      </tbody>
+    </table>
   </div>)
 }
 
