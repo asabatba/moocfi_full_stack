@@ -15,6 +15,9 @@ const App = () => {
 
     const handleSubmit = (ev) => {
         ev.preventDefault()
+        if (persons.find((p) => p.name === newName) !== undefined) {
+            alert(`The name ${newName} has already been added.`)
+        }
         setPersons(persons.concat({ name: newName }))
     }
 
