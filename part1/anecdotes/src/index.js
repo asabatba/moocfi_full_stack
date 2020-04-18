@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 
 const Next = (props) => {
@@ -24,6 +24,12 @@ const MostVotes = (props) => {
 
   const maxVotes = props.votes.reduce((acc, v) => Math.max(acc, v), 0);
   const idx = props.votes.indexOf(maxVotes)
+
+  useEffect(() => {
+    // Check if element is only rebuilt on [idx] change.
+    console.log('effected!')
+    document.title = anecdotes[idx]
+  }, [idx])
 
   return (
     <div>
