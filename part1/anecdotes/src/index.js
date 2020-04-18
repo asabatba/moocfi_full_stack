@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const Button = (props) => {
+const Next = (props) => {
 
   const rng = () => Math.floor(Math.random() * anecdotes.length);
   const handleClick = () => {
@@ -10,13 +10,39 @@ const Button = (props) => {
   return (<button onClick={handleClick}>Another!</button>)
 }
 
-const App = (props) => {
-  const [selected, setSelected] = useState(0)
+const Vote = (props) => {
+
+  const handleClick = () => {
+    const newState = [...props.votes]
+    newState[props.selected]++;
+    props.setFunction(newState);
+  };
+  return (<button onClick={handleClick}>Vote+</button>)
+}
+
+const MostVotes = (props) => {
+
+  const maxVotes = props.votes.reduce((acc, v) => Math.max(acc, v), 0);
+  const idx = props.votes.indexOf(maxVotes)
 
   return (
     <div>
-      <Button setSelected={setSelected}></Button>
+      <h2>Top anecdote ({maxVotes} votes)</h2>
+      <span>{anecdotes[idx]}</span>
+    </div>
+  )
+}
+
+const App = (props) => {
+  const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Uint8Array(anecdotes.length))
+
+  return (
+    <div>
       <h2>{props.anecdotes[selected]}</h2>
+      <h3>has {votes[selected]} votes</h3>
+      <Vote selected={selected} votes={votes} setFunction={setVotes}></Vote> <Next setSelected={setSelected}></Next>
+      <MostVotes votes={votes}></MostVotes>
     </div>
   )
 }
