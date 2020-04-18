@@ -14,7 +14,7 @@ const Button = (props) => {
   </button>)
 }
 
-const Counter = (props) => (<div>{props.name} : {props.value}</div>)
+const Statistic = (props) => (<div>{props.name} : {props.value}</div>)
 
 const Statistics = (props) => {
 
@@ -34,12 +34,12 @@ const Statistics = (props) => {
 
   return (<div>
     <Title text="statistics"></Title>
-    <Counter name="good" value={props.good}></Counter>
-    <Counter name="neutral" value={props.neutral}></Counter>
-    <Counter name="bad" value={props.bad}></Counter>
-    <Counter name="all" value={sum}></Counter>
-    <Counter name="average" value={avg}></Counter>
-    <Counter name="positive" value={positive}></Counter>
+    <Statistic name="good" value={props.good}></Statistic>
+    <Statistic name="neutral" value={props.neutral}></Statistic>
+    <Statistic name="bad" value={props.bad}></Statistic>
+    <Statistic name="all" value={sum}></Statistic>
+    <Statistic name="average" value={avg}></Statistic>
+    <Statistic name="positive" value={positive}></Statistic>
   </div>)
 }
 
