@@ -16,6 +16,24 @@ const Button = (props) => {
 
 const Counter = (props) => (<div>{props.name} : {props.value}</div>)
 
+const Statistics = (props) => {
+
+  const all = Object.values(props);
+  const sum = all.reduce((acc, v) => acc + v, 0);
+  const avg = (props.good - props.bad) / all.length;
+  const positive = props.good / (sum > 0 ? sum : 1) * 100 + ' %';
+
+  return (<div>
+    <Title text="statistics"></Title>
+    <Counter name="good" value={props.good}></Counter>
+    <Counter name="neutral" value={props.neutral}></Counter>
+    <Counter name="bad" value={props.bad}></Counter>
+    <Counter name="all" value={sum}></Counter>
+    <Counter name="average" value={avg}></Counter>
+    <Counter name="positive" value={positive}></Counter>
+  </div>)
+}
+
 const App = () => {
   // save clicks of each button to own state
   const [good, setGood] = useState(0)
@@ -29,10 +47,7 @@ const App = () => {
       <Button name="neutral" value={neutral} updater={setNeutral}></Button>
       <Button name="bad" value={bad} updater={setBad}></Button>
 
-      <Title text="statistics"></Title>
-      <Counter name="good" value={good}></Counter>
-      <Counter name="neutral" value={neutral}></Counter>
-      <Counter name="bad" value={bad}></Counter>
+      <Statistics good={good} neutral={neutral} bad={bad}></Statistics>
     </div>
   )
 }
