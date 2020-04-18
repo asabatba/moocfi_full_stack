@@ -19,7 +19,16 @@ const Counter = (props) => (<div>{props.name} : {props.value}</div>)
 const Statistics = (props) => {
 
   const all = Object.values(props);
+  console.log(all)
+
   const sum = all.reduce((acc, v) => acc + v, 0);
+
+  if (sum === 0)
+    return (<div>
+      <Title text="statistics"></Title>
+      <span>No feedback given yet</span>
+    </div>)
+
   const avg = (props.good - props.bad) / all.length;
   const positive = props.good / (sum > 0 ? sum : 1) * 100 + ' %';
 
