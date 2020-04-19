@@ -3,22 +3,25 @@ import React, { useState } from 'react'
 const Number = ({ person }) => {
 
     return (
-        <div>{person.name}</div>
+        <div>{person.name} ~ {person.phone}</div>
     )
 }
 
 const App = () => {
     const [persons, setPersons] = useState([
-        { name: 'Arto Hellas' }
+        { name: 'Arto Hellas', phone: '666 555 444' }
     ])
     const [newName, setNewName] = useState('')
+    const [newPhone, setNewPhone] = useState('')
+
 
     const handleSubmit = (ev) => {
         ev.preventDefault()
         if (persons.find((p) => p.name === newName) !== undefined) {
             alert(`The name ${newName} has already been added.`)
+            return;
         }
-        setPersons(persons.concat({ name: newName }))
+        setPersons(persons.concat({ name: newName, phone: newPhone }))
     }
 
     return (
@@ -26,7 +29,9 @@ const App = () => {
             <h2>Phonebook</h2>
             <form>
                 <div>
-                    name: <input value={newName} onChange={(ev) => setNewName(ev.target.value)} />
+                    Name: <input value={newName} onChange={(ev) => setNewName(ev.target.value)} />
+                    <br />
+                    Number: <input value={newPhone} onChange={(ev) => setNewPhone(ev.target.value)} />
                 </div>
                 <div>
                     <button type="submit" onClick={handleSubmit}>add</button>
