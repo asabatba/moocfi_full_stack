@@ -3,7 +3,14 @@ import React, { useEffect, useState } from 'react';
 
 import Axios from 'axios';
 
-function CountryData({ data }) {
+function CountryData({ data, setQuery }) {
+
+  const handleClick = (nq) => {
+    return (ev) => {
+      ev.preventDefault();
+      setQuery(nq);
+    }
+  };
 
   if (data.length === 0) {
     return (<div>No results</div>)
@@ -11,12 +18,14 @@ function CountryData({ data }) {
     return (<div>Too many results ({data.length})</div>)
   } else if (data.length === 1) {
     const country = data[0];
+    //{country.demonym}
     return (
       <div>
         <h2>{country.name} ({country.nativeName})</h2>
         <img src={country.flag} alt={'Flag of ' + country.name} style={{ width: '180px' }}></img><br />
         <span>The population of {country.name} is {country.population}, and its capital is {country.capital}.</span><br />
-        <span>{country.demonym} people speak {country.languages.map((lang) => lang.name).join(", ")}.</span><br />
+
+        <span>Their people speak {country.languages.map((lang) => lang.name).join(", ")}.</span><br />
         <span>{country.name} is located in {country.subregion}</span>
       </div>
     )
@@ -24,7 +33,7 @@ function CountryData({ data }) {
   else {
     return (
       <ul>
-        {data.map((c) => (<li key={c.alpha3Code}>{c.name} ({c.nativeName})</li>))}
+        {data.map((c) => (<li key={c.alpha3Code}>{c.name} ({c.nativeName})<button onClick={handleClick(c.name)}>goto</button></li>))}
       </ul>
     )
   }
@@ -32,7 +41,7 @@ function CountryData({ data }) {
 
 function App() {
 
-  const [query, setQuery] = useState('Romania');
+  const [query, setQuery] = useState('Macao');
   const [countries, setCountries] = useState([]);
 
   useEffect(() => {
@@ -53,7 +62,7 @@ function App() {
     <div className="App">
       Query: <input type="text" value={query} onChange={(ev) => { setQuery(ev.target.value) }}>
       </input>
-      <CountryData data={countries}></CountryData>
+      <CountryData data={countries} setQuery={setQuery}></CountryData>
     </div>
   );
 }
