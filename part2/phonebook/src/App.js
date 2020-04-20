@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from "axios";
+import api from './api';
 
 const Persons = ({ persons, filter }) => {
     return (<div>
@@ -25,7 +26,11 @@ const Form = ({ persons, setPersons }) => {
             alert(`The name ${newName} has already been added.`)
             return;
         }
-        setPersons(persons.concat({ name: newName, phone: newPhone }))
+        api.create({ name: newName, phone: newPhone })
+            .then(data => {
+                console.log(data);
+                setPersons(persons.concat(data))
+            })
     }
 
     const [newName, setNewName] = useState('')
@@ -49,11 +54,11 @@ const App = () => {
 
     useEffect(() => {
 
-        const eventHandler = response => {
-            setPersons(response.data)
+        const eventHandler = data => {
+            setPersons(data)
         }
 
-        const promise = axios.get('http://localhost:3001/persons')
+        const promise = api.getAll();
         promise.then(eventHandler)
 
     }, [])
