@@ -26,15 +26,28 @@ const Form = ({ persons, setPersons }) => {
 
     const handleSubmit = (ev) => {
         ev.preventDefault()
-        if (persons.find((p) => p.name === newName) !== undefined) {
-            alert(`The name ${newName} has already been added.`)
+        const person = { name: newName, phone: newPhone }
+
+        const existingPerson = persons.find((p) => p.name === newName)
+        if (existingPerson !== undefined) {
+
+            if (window.confirm(`The name ${newName} has already been added. Update phone number?`))
+                updatePerson(existingPerson.id, person)
+
             return;
         }
-        api.create({ name: newName, phone: newPhone })
+        api.create(person)
             .then(data => {
                 console.log(data);
                 setPersons(persons.concat(data))
             })
+    }
+
+    const updatePerson = (id, updatedPerson) => {
+
+        api.update(id, updatedPerson).then(data =>
+            setPersons(persons.map((p) => p.id === id ? data : p))
+        );
     }
 
     const [newName, setNewName] = useState('')
