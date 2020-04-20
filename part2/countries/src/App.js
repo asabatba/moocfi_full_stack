@@ -3,7 +3,32 @@ import React, { useEffect, useState } from 'react';
 
 import Axios from 'axios';
 
-function CountryData({ data, setQuery }) {
+function WeatherData({ city, apiKey }) {
+
+  const [weather, setWeather] = useState(null);
+
+  useEffect(() => {
+    Axios.get(`http://api.weatherstack.com/current?access_key=${apiKey}&query=${city}`)
+      .then((r) => {
+        console.log(r.data);
+        setWeather(r.data.current);
+      });
+
+
+  }, [city, apiKey]);
+
+  if (weather === null) return (<div>Loading...</div>)
+
+  return (<div>
+    <h2>Weather in {city}</h2>
+    <img src={weather.weather_icons[0]} alt="current weather"></img>
+    <p>temp: {weather.temperature}</p>
+    <p>humidity: {weather.humidity}</p>
+    <p>description: {weather.weather_descriptions.join(' + ')}</p>
+  </div>);
+}
+
+function CountryData({ data, setQuery, weatherKey }) {
 
   const handleClick = (nq) => {
     return (ev) => {
@@ -18,15 +43,18 @@ function CountryData({ data, setQuery }) {
     return (<div>Too many results ({data.length})</div>)
   } else if (data.length === 1) {
     const country = data[0];
+    const noCapital = country.capital.trim() === '';
+    const textOne = noCapital ? `The population of ${country.name} is ${country.population}.` : `The population of ${country.name} is ${country.population}, and its capital is ${country.capital}.`;
     //{country.demonym}
     return (
       <div>
         <h2>{country.name} ({country.nativeName})</h2>
         <img src={country.flag} alt={'Flag of ' + country.name} style={{ width: '180px' }}></img><br />
-        <span>The population of {country.name} is {country.population}, and its capital is {country.capital}.</span><br />
+        <span>{textOne}</span><br />
 
         <span>Their people speak {country.languages.map((lang) => lang.name).join(", ")}.</span><br />
         <span>{country.name} is located in {country.subregion}</span>
+        <WeatherData city={noCapital ? country.name : country.capital} apiKey={weatherKey}></WeatherData>
       </div>
     )
   }
@@ -43,6 +71,8 @@ function App() {
 
   const [query, setQuery] = useState('Macao');
   const [countries, setCountries] = useState([]);
+
+  const weatherKey = process.env['REACT_APP_WEATHERSTACK_KEY'];
 
   useEffect(() => {
     if (query.trim() === '') return;
@@ -62,7 +92,7 @@ function App() {
     <div className="App">
       Query: <input type="text" value={query} onChange={(ev) => { setQuery(ev.target.value) }}>
       </input>
-      <CountryData data={countries} setQuery={setQuery}></CountryData>
+      <CountryData data={countries} setQuery={setQuery} weatherKey={weatherKey}></CountryData>
     </div>
   );
 }
