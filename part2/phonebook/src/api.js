@@ -26,9 +26,16 @@ const update = async (id, person) => {
     );
 }
 
+const remove = async (id) => {
+
+    return Axios.delete(`${baseUrl}/${id}`).then(r =>
+        r.data
+    );
+}
 
 export default {
     getAll,
     create,
-    update
+    update,
+    remove
 }

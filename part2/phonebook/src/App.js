@@ -1,20 +1,24 @@
-import React, { useState, useEffect } from 'react'
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
 import api from './api';
 
-const Persons = ({ persons, filter }) => {
+const Persons = ({ persons, filter, removeId }) => {
     return (<div>
         {persons
             .filter((p) => (p.name.toLowerCase().includes(filter.toLowerCase())))
-            .map((p) => <Number key={p.name} person={p}></Number>)}
+            .map((p) => <Number key={p.name} person={p} removeId={removeId}></Number>)}
     </div>
     )
 }
 
-const Number = ({ person }) => {
+const Number = ({ person, removeId }) => {
+
+    const handleClick = () => {
+        if (window.confirm(`Do you really want to remove ${person.name} from the list?`))
+            removeId(person.id);
+    }
 
     return (
-        <div>{person.name} ~ {person.phone}</div>
+        <div>{person.name} ~ {person.phone} <button onClick={handleClick}>delete</button></div>
     )
 }
 
@@ -63,6 +67,12 @@ const App = () => {
 
     }, [])
 
+    const removeId = (id) =>
+        api.remove(id).then(data => {
+            setPersons(persons.filter(p => p.id !== id));
+        })
+
+
     return (
         <div>
             <h2>Phonebook</h2>
@@ -71,7 +81,7 @@ const App = () => {
             <h3>Add new people</h3>
             <Form persons={persons} setPersons={setPersons}></Form>
             <h3>Numbers</h3>
-            <Persons persons={persons} filter={filter}></Persons>
+            <Persons persons={persons} filter={filter} removeId={removeId}></Persons>
         </div>
     )
 }
