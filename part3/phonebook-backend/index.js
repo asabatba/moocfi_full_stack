@@ -8,7 +8,7 @@ app.use(express.json());
 const PORT = 3001;
 app.listen(PORT, () => console.log(`listening on port ${PORT}`));
 
-const persons = [
+let persons = [
     {
         name: "Arto Hellas",
         number: "040-132456",
@@ -49,3 +49,16 @@ app.get('/api/persons/:id', (request, response) => {
     }
 });
 
+
+app.delete('/api/persons/:id', (request, response) => {
+
+    const id = parseInt(request.params.id);
+    const personIdx = persons.findIndex((p) => p.id === id);
+
+    if (personIdx) {
+        persons = persons.filter((p) => p.id !== id);
+        response.status(204).end();
+    } else {
+        response.status(404).end();
+    }
+});
