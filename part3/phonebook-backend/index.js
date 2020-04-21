@@ -67,7 +67,12 @@ app.post('/api/persons', (request, response) => {
     const body = request.body;
 
     if (!body.name || !body.number) {
-        response.status(400).json({ error: 'Be sure to provide the name and number in the request' });
+        response.status(400).json({ error: 'Be sure to provide the name and number in the request.' });
+        return;
+    }
+
+    if (persons.find(p => p.name === body.name)) {
+        response.status(400).json({ error: `The name ${body.name} is already un use. POST calls are exclusive for creation of new entries.` });
         return;
     }
 
