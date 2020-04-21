@@ -62,3 +62,18 @@ app.delete('/api/persons/:id', (request, response) => {
         response.status(404).end();
     }
 });
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body;
+
+    if (!body.name || !body.number) {
+        response.status(400).json({ error: 'Be sure to provide the name and number in the request' });
+        return;
+    }
+
+    const id = Math.floor(Math.random() * 1000000);
+    const person = { ...body, id };
+    persons = persons.concat(person);
+
+    response.json(person);
+});
