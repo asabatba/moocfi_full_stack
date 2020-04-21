@@ -1,0 +1,12 @@
+
+
+button {
+    border: 1px solid #a8a8a8;
+    border-radius: 4px;
+    margin: 2px 4px;
+    transition: border 100ms;
+}
+
+button:hover {
+    border-color: blue;
+}
