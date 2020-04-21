@@ -4,7 +4,16 @@
     transition: opacity visibility 100ms;
     margin: 3px;
     padding: 3px;
+}
+
+.info {
+    background-color: #e0e0ff;
     border: 3px solid blue;
+}
+
+.error {
+    background-color: #ffe0e0;
+    border: 3px solid red;
 }
 
 .active {

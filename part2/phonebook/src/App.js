@@ -9,7 +9,7 @@ import Persons from './Persons';
 const App = () => {
     const [persons, setPersons] = useState([])
     const [filter, setFilter] = useState('')
-    const [message, setMessage] = useState(null)
+    const [message, setMessage] = useState({ content: null, type: 'info' }) // info or error
 
 
     useEffect(() => {
@@ -28,12 +28,12 @@ const App = () => {
             setPersons(persons.filter(p => p.id !== id));
         })
 
-    const msgClasses = 'message' + (message != null ? ' active' : '');
+    const msgClasses = 'message ' + (message.type) + ' ' + (message.content != null ? ' active' : '');
 
     return (
         <div>
             <h2>Phonebook</h2>
-            <div className={msgClasses}>{message}</div>
+            <div className={msgClasses}>{message.content}</div>
             <h3>Filter phonebook</h3>
             <input value={filter} onChange={(ev) => setFilter(ev.target.value)}></input>
             <h3>Add new people</h3>

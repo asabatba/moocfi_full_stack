@@ -21,8 +21,8 @@ const Form = ({ persons, setPersons, setMessage }) => {
             .then(data => {
                 console.log(data);
                 setPersons(persons.concat(data))
-                setMessage(`Added '${data.name}' to the phonebook`)
-                setTimeout(() => { setMessage(null) }, 3000)
+                setMessage({ content: `Added '${data.name}' to the phonebook`, type: 'info' })
+                setTimeout(() => { setMessage({ content: null, type: 'info' }) }, 3000)
             })
     }
 
@@ -30,10 +30,14 @@ const Form = ({ persons, setPersons, setMessage }) => {
 
         api.update(id, updatedPerson).then(data => {
             setPersons(persons.map((p) => p.id === id ? data : p))
-            setMessage(`Updated listed phone of '${data.name}'`)
-            setTimeout(() => { setMessage(null) }, 3000)
-        }
-        );
+            setMessage({ content: `Updated listed phone of '${data.name}'`, type: 'info' })
+            setTimeout(() => { setMessage({ content: null, type: 'info' }) }, 3000)
+        }).catch((err) => {
+            console.log(err.response)
+            setPersons(persons.filter((p) => p.id !== id))
+            setMessage({ content: `Update of ${updatedPerson.name} failed`, type: 'error' })
+            setTimeout(() => { setMessage({ content: null, type: 'error' }) }, 3000)
+        })
     }
 
     const [newName, setNewName] = useState('')
