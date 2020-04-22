@@ -7,7 +7,7 @@ const Form = ({ persons, setPersons, setMessage }) => {
 
     const handleSubmit = (ev) => {
         ev.preventDefault()
-        const person = { name: newName, phone: newPhone }
+        const person = { name: newName, number: newNumber }
 
         const existingPerson = persons.find((p) => p.name === newName)
         if (existingPerson !== undefined) {
@@ -41,13 +41,13 @@ const Form = ({ persons, setPersons, setMessage }) => {
     }
 
     const [newName, setNewName] = useState('')
-    const [newPhone, setNewPhone] = useState('')
+    const [newNumber, setNewNumber] = useState('')
 
     return (<form>
         <div>
             Name: <input value={newName} onChange={(ev) => setNewName(ev.target.value)} />
             <br />
-            Number: <input value={newPhone} onChange={(ev) => setNewPhone(ev.target.value)} />
+            Number: <input value={newNumber} onChange={(ev) => setNewNumber(ev.target.value)} />
         </div>
         <div>
             <button type="submit" onClick={handleSubmit}>add</button>

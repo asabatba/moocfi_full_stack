@@ -1,11 +1,13 @@
 
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 
 const app = new express();
 
+app.use(cors());
 app.use(express.json());
-
+app.use(express.static('build'));
 
 morgan.token('jsonReq', (req) => req.method === 'POST' ? JSON.stringify(req.body) : '');
 
@@ -55,6 +57,25 @@ app.get('/api/persons/:id', (request, response) => {
     }
 });
 
+app.put('/api/persons/:id', (request, response) => {
+
+    // if (!body.name || !body.number) {
+    //     response.status(400).json({ error: 'Be sure to provide the name and number in the request.' });
+    //     return;
+    // }
+
+    const id = parseInt(request.params.id);
+    const person = persons.find((p) => p.id === id);
+
+    if (person) {
+        console.log(person,request.body);
+        const nperson = { ...person, ...request.body };
+        persons = persons.concat(nperson);
+        response.status(200).json(nperson);
+    } else {
+        response.status(404).end();
+    }
+});
 
 app.delete('/api/persons/:id', (request, response) => {
 
