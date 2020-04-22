@@ -13,7 +13,7 @@ morgan.token('jsonReq', (req) => req.method === 'POST' ? JSON.stringify(req.body
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :jsonReq'));
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`listening on port ${PORT}`));
 
 let persons = [
@@ -68,7 +68,7 @@ app.put('/api/persons/:id', (request, response) => {
     const person = persons.find((p) => p.id === id);
 
     if (person) {
-        console.log(person,request.body);
+        console.log(person, request.body);
         const nperson = { ...person, ...request.body };
         persons = persons.concat(nperson);
         response.status(200).json(nperson);
@@ -80,9 +80,9 @@ app.put('/api/persons/:id', (request, response) => {
 app.delete('/api/persons/:id', (request, response) => {
 
     const id = parseInt(request.params.id);
-    const personIdx = persons.findIndex((p) => p.id === id);
+    const person = persons.find((p) => p.id === id);
 
-    if (personIdx) {
+    if (person) {
         persons = persons.filter((p) => p.id !== id);
         response.status(204).end();
     } else {
