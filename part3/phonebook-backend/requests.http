@@ -1,14 +1,30 @@
 
 
-DELETE http://localhost:3001/api/persons/3 HTTP/1.1
-content-type: application/json
+
+GET http://localhost:3001/api/persons HTTP/1.1
 
 ###
+
 
 POST http://localhost:3001/api/persons HTTP/1.1
 content-type: application/json
 
 {
-    "name": "hey",
-    "number": "12345"
+    "name": "mary jane",
+    "number": "4567"
 }
+
+### 
+
+PUT http://localhost:3001/api/persons/5eae8e418c7bb01280b7b456 HTTP/1.1
+content-type: application/json
+
+{
+    "name": "pepe",
+    "number": "4567new"
+}
+
+###
+
+DELETE http://localhost:3001/api/persons/3 HTTP/1.1
+content-type: application/json
