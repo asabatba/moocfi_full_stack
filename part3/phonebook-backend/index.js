@@ -1,5 +1,5 @@
 
-require('dotenv').config()
+require('dotenv').config();
 
 const express = require('express');
 const morgan = require('morgan');
@@ -21,24 +21,24 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`listening on port ${PORT}`));
 
 
-app.get('/info', (req, res) => {
+app.get('/info', (req, res, next) => {
 
     Entry.find({}).then(results => {
-        res.send(`<p>Phonebook has info for ${results.length} people</p><p>${(new Date()).toString()}</p>`)
+        res.send(`<p>Phonebook has info for ${results.length} people</p><p>${(new Date()).toString()}</p>`);
     }).catch(err => next(err));
 
-})
+});
 
 
 app.get('/api/persons', (request, response) => {
 
     Entry.find({}).then(result => {
-        logger.color('magenta').log("Phonebook\n");
+        logger.color('magenta').log('Phonebook\n');
         result.forEach(entry => {
-            logger.color('yellow').log(`${entry.name} - ${entry.number}`)
+            logger.color('yellow').log(`${entry.name} - ${entry.number}`);
         });
         response.json(result.map(e => e.toJSON()));
-    })
+    });
 });
 
 
@@ -55,7 +55,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 });
 
 
-app.put('/api/persons/:id', (request, response, next) => {
+app.put('/api/persons/:id', (request, response) => {
 
     const body = request.body;
 
@@ -72,7 +72,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
 
-    Entry.findByIdAndDelete(request.params.id).then(doc => {
+    Entry.findByIdAndDelete(request.params.id).then(() => {
         response.status(204).end();
     }).catch(err => next(err));
 });
@@ -100,18 +100,18 @@ app.post('/api/persons', (request, response, next) => {
 
 
 const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
-}
+    response.status(404).send({ error: 'unknown endpoint' });
+};
 
-app.use(unknownEndpoint)
+app.use(unknownEndpoint);
 
 
 const errorHandler = (error, req, res, next) => {
     console.error(error.message);
     if (error.name === 'CastError') {
-        return res.status(400).send({ error: 'ill-formed id' })
+        return res.status(400).send({ error: 'ill-formed id' });
     }
     next(error);
-}
+};
 
 app.use(errorHandler);

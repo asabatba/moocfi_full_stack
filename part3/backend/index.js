@@ -3,7 +3,7 @@ require('dotenv').config()
 
 const express = require('express')
 const app = express()
-const cors = require('cors');
+const cors = require('cors')
 const Note = require('./models/note')
 
 app.use(cors())
@@ -18,7 +18,7 @@ const requestLogger = (request, response, next) => {
 }
 app.use(requestLogger)
 
-let notes = [{ id: 1, content: "HTML is easy", date: "2019-05-30T17:30:31.098Z", important: true }, { id: 2, content: "Browser can execute only Javascript", date: "2019-05-30T18:39:34.091Z", important: false }, { id: 3, content: "GET and POST are the most important methods of HTTP protocol", date: "2019-05-30T19:20:14.298Z", important: true }]
+// let notes = [{ id: 1, content: 'HTML is easy', date: '2019-05-30T17:30:31.098Z', important: true }, { id: 2, content: 'Browser can execute only Javascript', date: '2019-05-30T18:39:34.091Z', important: false }, { id: 3, content: 'GET and POST are the most important methods of HTTP protocol', date: '2019-05-30T19:20:14.298Z', important: true }]
 
 app.get('/', (req, res) => {
     res.send('<h1>Hello World!</h1>')
@@ -30,7 +30,7 @@ app.get('/api/notes', (req, res) => {
     })
 })
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
@@ -49,20 +49,20 @@ app.get('/api/notes/:id', (request, response, next) => {
 
 app.delete('/api/notes/:id', (request, response, next) => {
     Note.findByIdAndRemove(request.params.id)
-        .then(result => {
+        .then(() => {
             response.status(204).end()
         })
         .catch(error => next(error))
 })
 
-const generateId = () => {
-    const maxId = notes.length > 0
-        ? Math.max(...notes.map(n => n.id))
-        : 0
-    return maxId + 1
-}
+// const generateId = () => {
+//     const maxId = notes.length > 0
+//         ? Math.max(...notes.map(n => n.id))
+//         : 0
+//     return maxId + 1
+// }
 
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', (request, response, next) => {
     const body = request.body
 
     if (body.content === undefined) {
@@ -75,9 +75,12 @@ app.post('/api/notes', (request, response) => {
         date: new Date(),
     })
 
-    note.save().then(savedNote => {
-        response.json(savedNote.toJSON())
-    })
+    note.save()
+        .then(savedNote => savedNote.toJSON())
+        .then(savedAndFormattedNote => {
+            response.json(savedAndFormattedNote)
+        })
+        .catch(err => next(err))
 })
 
 app.put('/api/notes/:id', (request, response, next) => {
@@ -103,11 +106,13 @@ app.use(unknownEndpoint)
 
 
 const errorHandler = (error, req, res, next) => {
-    console.error(error);
+    console.error(error)
     if (error.name === 'CastError') {
         return res.status(400).send({ error: 'ill-formed id' })
+    } else if (error.name === 'ValidationError') {
+        return res.status(400).json({ error: error.message })
     }
-    next(error);
+    next(error)
 }
 
-app.use(errorHandler);
+app.use(errorHandler)
