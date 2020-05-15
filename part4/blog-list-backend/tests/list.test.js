@@ -20,3 +20,14 @@ describe('total likes', () => {
     })
 
 })
+
+describe('favorite blog', () => {
+
+    test('several blogs', () => {
+        const result = listHelper.favoriteBlog(blogs)
+        expect(result).toEqual({ title: "Canonical string reduction", author: "Edsger W. Dijkstra", likes: 12, })
+    })
+    test('empty blog list', () => {
+        expect(listHelper.favoriteBlog([])).toEqual(null)
+    })
+})
