@@ -28,6 +28,13 @@ describe('api blogs endpoint', () => {
             .toContain('http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html')
     })
 
+    test('verify that first blog contain id', async () => {
+
+        const response = await api.get('/api/blogs')
+        expect(response.body[0].id)
+            .toBeDefined()
+    })
+
 })
 
 
