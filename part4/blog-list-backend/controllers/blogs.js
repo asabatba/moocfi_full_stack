@@ -9,6 +9,10 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 blogsRouter.post('/', async (request, response) => {
+
+    if (!request.body.title && !request.body.url) {
+        return response.status(400).json({ error: 'both title and url should not be missing' })
+    }
     const blog = new Blog(request.body)
 
     const result = await blog
