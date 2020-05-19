@@ -67,6 +67,13 @@ describe('post api blogs endpoint', () => {
             .toContain(id)
     })
 
+    test('verify new blog likes are zero if undefined', async () => {
+
+        const postResponse = await api.post('/api/blogs', { title: 'demo blog post', url: 'http://example.com', author: 'unknown' })
+        expect(postResponse.body.likes).toBe(0)
+
+    })
+
 })
 
 
