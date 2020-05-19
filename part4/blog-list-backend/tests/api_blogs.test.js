@@ -6,7 +6,7 @@ const supertest = require('supertest')
 const api = supertest(app)
 const mongoose = require('mongoose')
 
-describe('api blogs endpoint', () => {
+describe('get api blogs endpoint', () => {
 
     test('reponse is ok and json', async () => {
 
@@ -33,6 +33,38 @@ describe('api blogs endpoint', () => {
         const response = await api.get('/api/blogs')
         expect(response.body[0].id)
             .toBeDefined()
+    })
+
+})
+
+describe('post api blogs endpoint', () => {
+
+    test('reponse is created and json', async () => {
+
+        await api.post('/api/blogs', blogs[0])
+            .expect(201)
+            .expect('Content-Type', /json/)
+    })
+
+    test('verify blog count increases', async () => {
+
+        const get1 = await api.get('/api/blogs')
+        const initialLength = get1.body.length;
+
+        await api.post('/api/blogs', blogs[0])
+        const getResponse = await api.get('/api/blogs')
+        expect(getResponse.body)
+            .toHaveLength(initialLength + 1)
+    })
+
+    test('verify new blog is added', async () => {
+
+        const postResponse = await api.post('/api/blogs', blogs[0])
+        const id = postResponse.body.id;
+
+        const getResponse = await api.get('/api/blogs')
+        expect(getResponse.body.map(b => b.id))
+            .toContain(id)
     })
 
 })
