@@ -89,6 +89,35 @@ describe('post api blogs endpoint', () => {
 
 })
 
+describe('try to delete a blog post', () => {
+
+    test('with a known id', async () => {
+        await api.delete('/api/blogs/' + blogs[0]._id)
+            .expect(204);
+    })
+
+    test('with an invalid id', async () => {
+
+        await api.delete('/api/blogs/abcdef12345')
+            .expect(400);
+    })
+
+    test('that does not exist', async () => {
+
+        await api.delete('/api/blogs/5a422ba71b54a616234d11fb')
+            .expect(404);
+    })
+
+    test('and check that the total amount decreases', async () => {
+
+        const count = (await api.get('/api/blogs')).body.length;
+        await api.delete('/api/blogs/' + blogs[0]._id);
+        const b2 = (await api.get('/api/blogs')).body;
+        expect(b2).toHaveLength(count - 1);
+    })
+
+})
+
 
 beforeEach(async () => {
 
