@@ -82,7 +82,7 @@ describe('post api blogs endpoint', () => {
 
     test('verify request fails if title and url missing', async () => {
 
-        await api.post('/api/blogs', { author: 'unknown' })
+        await api.post('/api/blogs').send({ author: 'unknown' })
             .expect(400)
 
     })
@@ -118,6 +118,37 @@ describe('try to delete a blog post', () => {
 
 })
 
+describe('try to update a blog post', () => {
+
+    test('with a known id', async () => {
+        const r = await api.put('/api/blogs/' + blogs[0]._id).send({ author: 'updated!' })
+            .expect(200);
+
+        const g = await api.get('/api/blogs');
+
+        expect(r.body.author).toBe('updated!');
+
+    })
+
+    test('with an invalid id', async () => {
+
+        await api.put('/api/blogs/abcdef12345').send({})
+            .expect(400);
+    })
+
+    test('that does not exist', async () => {
+
+        await api.put('/api/blogs/5a422ba71b54a616234d11fb').send({})
+            .expect(404);
+    })
+
+    // test('with a property that does not exist', async () => {
+
+    //     const r = await api.put('/api/blogs/' + blogs[0]._id).send({ who: 'updated!' })
+    //         .expect(400);
+    // })
+
+})
 
 beforeEach(async () => {
 
